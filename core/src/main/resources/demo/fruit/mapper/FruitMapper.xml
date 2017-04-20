@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="demo.fruit.mapper.FruitMapper">
+    <resultMap id="BaseResultMap" type="demo.fruit.dto.Fruit">
+        <result column="f_id" property="id" jdbcType="DECIMAL" />
+        <result column="f_name" property="name" jdbcType="VARCHAR" />
+        <result column="f_price" property="price" jdbcType="DECIMAL" />
+        <result column="f_producing_area" property="producingArea" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <select id="selectByFruit" parameterType="demo.fruit.dto.Fruit" resultMap="BaseResultMap">
+        SELECT f.f_id,
+        f.f_name,
+        f.f_price,
+        f.f_producing_area
+        FROM fruit f
+        <where>
+            <if test="id != null">
+                and f.f_id like #{id,jdbcType=DECIMAL}
+            </if>
+            <if test="name != null">
+                and f.f_name like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="price != null">
+                and f.f_price = #{price,jdbcType=DECIMAL}
+            </if>
+            <if test="producingArea != null">
+                and f.f_producing_area = #{producingArea,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertFruit" parameterType="demo.fruit.dto.Fruit">
+        INSERT INTO fruit
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                f_id,
+            </if>
+            <if test="name != null" >
+                f_name,
+            </if>
+            <if test="price != null">
+                f_price,
+            </if>
+            <if test="producingArea != null">
+                f_producing_area,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="producingArea != null">
+                #{producingArea,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateFruit" parameterType="demo.fruit.dto.Fruit" >
+        update fruit
+        <set >
+            <if test="id != null" >
+                f_id = #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="name != null" >
+                f_name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                f_price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="producingArea != null">
+                f_producing_area = #{producingArea,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where f_id = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <delete id="deleteFruit" parameterType="demo.fruit.dto.Fruit" >
+        delete from fruit
+        where f_id= #{id,jdbcType=DECIMAL}
+    </delete>
+</mapper>
